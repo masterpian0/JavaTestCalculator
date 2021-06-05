@@ -2,7 +2,6 @@ package Calculiator;
 
 public class RomanNumber extends Number {
 
-    private final String[] ROMAN_NUMBERS_SYMBOL = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
     private String romes_value1;
     private String romes_value2;
     private int romes_value1_int;
@@ -53,6 +52,7 @@ public class RomanNumber extends Number {
     private int convertToInt(String romes_value){
         char[] value_char = romes_value.toCharArray();
         int[] values_int = new int[value_char.length];
+
         for (int i = 0; i < value_char.length; i++) {
             switch (value_char[i]) {
                 case 'I':
@@ -64,6 +64,12 @@ public class RomanNumber extends Number {
                 case 'X':
                     values_int[i] = 10;
                     break;
+                case 'L':
+                    values_int[i] = 50;
+                    break;
+                case 'C':
+                    values_int[i] = 100;
+                    break;
             }
         }
 
@@ -71,63 +77,85 @@ public class RomanNumber extends Number {
         for (int i = 0; i < values_int.length && values_int.length > i + 1; i++) {
             if (values_int[i] >= values_int[i+1]) {
                 result += values_int[i+1];
-            } else if (values_int[i] < values_int[i+1]) {
-                result = result + values_int[i+1] - 2;
+            }
+            else if (values_int[i] < values_int[i+1]) {
+                result += values_int[i+1] - 2;
             }
         }
         return result;
     }
 
-    private String convertResultToRomanNumbersSymbol(int n, int balanceValue) {
+    private String convertResultToRomanNumbersSymbol(int n) {
 
-        balanceValue = n % 10;
+        String s = sign;
+        int tempValue = n;
 
-        if (balanceValue != 0) {
-            try
-            {
-                return convertResultToRomanNumbersSymbol(n - balanceValue, 0) + ROMAN_NUMBERS_SYMBOL[balanceValue - 1];
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                sign = "-";
-                return convertResultToRomanNumbersSymbol(n - balanceValue, 0) + ROMAN_NUMBERS_SYMBOL[(balanceValue + 1) * -1];
-            }
+        if (n < 0) {
+            tempValue = n *(-1);
+            sign = "-";
         }
 
-        /* Negative roman number */
-
-        if (n > 0) {
-            n = n - 10;
-            return convertResultToRomanNumbersSymbol(n,0) + "X";
-        } else if (n < 0) {
-            n = n + 10;
-            return convertResultToRomanNumbersSymbol(n,0) + "X";
-        }   else {
-            return sign;
+        while (tempValue >= 100) {
+            s += "C";
+            tempValue -= 100;
         }
+        while (tempValue >= 90) {
+            s += "XC";
+            tempValue -= 90;
+        }
+        while (tempValue >= 50) {
+            s += "L";
+            tempValue -= 50;
+        }
+        while (tempValue >= 40) {
+            s += "XL";
+            tempValue -= 40;
+        }
+        while (tempValue >= 10) {
+            s += "X";
+            tempValue -= 10;
+        }
+        while (tempValue >= 9) {
+            s += "IX";
+            tempValue -= 9;
+        }
+        while (tempValue >= 5) {
+            s += "V";
+            tempValue -= 5;
+        }
+        while (tempValue >= 4) {
+            s += "IV";
+            tempValue -= 4;
+        }
+        while (tempValue >= 1) {
+            s += "I";
+            tempValue -= 1;
+        }
+            return sign + s;
     }
 
     @Override
     public void sum() {
         result_int = romes_value1_int + romes_value2_int;
-        result_string = convertResultToRomanNumbersSymbol(result_int, result_int);
+        result_string = convertResultToRomanNumbersSymbol(result_int);
     }
 
     @Override
     public void sub() {
         result_int = romes_value1_int - romes_value2_int;
-        result_string = convertResultToRomanNumbersSymbol(result_int, result_int);
+        result_string = convertResultToRomanNumbersSymbol(result_int);
     }
 
     @Override
     public void mul() {
         result_int = romes_value1_int * romes_value2_int;
-        result_string = convertResultToRomanNumbersSymbol(result_int, result_int);
+        result_string = convertResultToRomanNumbersSymbol(result_int);
     }
 
     @Override
     public void div() {
         result_int = romes_value1_int / romes_value2_int;
-        result_string = convertResultToRomanNumbersSymbol(result_int, result_int);
+        result_string = convertResultToRomanNumbersSymbol(result_int);
     }
 
     @Override
