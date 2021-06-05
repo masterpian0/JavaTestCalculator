@@ -65,7 +65,7 @@ public class Main {
             isValidString = false;
         }
 
-        if (symbolsOfString[0] == '-' | symbolsOfString[symbolsOfString.length-1] == '-'){
+        if (symbolsOfString[symbolsOfString.length-1] == '-'){
             isValidString = false;
         }
 
@@ -217,6 +217,3 @@ public class Main {
 
     }
 }
-
-
-
